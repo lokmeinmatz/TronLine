@@ -15,6 +15,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import networking.Server;
 
 public class MainGame extends Application{
 
@@ -81,6 +82,7 @@ public class MainGame extends Application{
 	
 	private void startGame(boolean fullscreen, int players, int enemys){
 		System.out.println("Starting game with fullscreen: "+fullscreen+", Players: "+players+", Enemies: "+enemys);
+		Server s = new Server(1234);
 	}
 
 }
