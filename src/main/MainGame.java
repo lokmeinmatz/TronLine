@@ -62,7 +62,7 @@ public class MainGame extends Application{
 		Button launch = new Button("Launch");
 		launch.setPrefSize(300, 200);
 		launch.setOnAction(e -> {
-			startGame(fullscreencheckbox.selectedProperty().get(), (int) playersslider.getValue(), 0);
+			startGame(fullscreencheckbox.selectedProperty().get(), (int) playersslider.getValue(), 0, runasServer.selectedProperty().get());
 		});
 		
 		launcher.setCenter(launch);
@@ -76,10 +76,13 @@ public class MainGame extends Application{
 		window.show();
 	}
 	
-	private void startGame(boolean fullscreen, int players, int enemys){
+	private void startGame(boolean fullscreen, int players, int enemys, boolean server){
 		System.out.println("Starting game with fullscreen: "+fullscreen+", Players: "+players+", Enemies: "+enemys);
-		Server s = new Server(8192);
-		s.start();
+		if(server){
+			Server s = new Server(8192);
+			s.start();
+		}
+		
 		Client client = new Client("localhost", 8192, "lokmeinmatz");
 		client.connect();
 	}
