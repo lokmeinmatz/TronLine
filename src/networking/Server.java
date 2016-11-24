@@ -5,6 +5,8 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Server {
 
@@ -13,17 +15,17 @@ public class Server {
 	private boolean listening = false;
 	private DatagramSocket socket;
 	private final int MAX_PACKET_SIZE = 1024;
-	
+	private List<Server_Client> clients;
 	private byte[] recievedDataBuffer = new byte[MAX_PACKET_SIZE * 10];
 	
 	public Server(int port){
 		this.port = port;
-		
+		clients = new ArrayList<>();
 	}
 
 	public void start(){
 		listening = true;
-		
+		System.out.println("Starting server");
 		try {
 			socket = new DatagramSocket(getPort());
 		} catch (SocketException e) {
@@ -58,11 +60,18 @@ public class Server {
 		byte[] data = packet.getData();
 		if(new String(data, 0, 5).equals("LOGIN")){
 			String[] logininfo = new String(data).split("§");
-			System.out.println(logininfo[1]);
+			System.out.println(logininfo[1]+" joined!");
+			
+			Server_Client c = new Server_Client(logininfo[1], packet.getAddress(), packet.getPort(), new int[]{111, 111, 111});
+			if(!clients.contains(c)){
+				clients.add(c);
+			}
 		}
 		else{
 			String[] logininfo = new String(data).split("§");
-			System.out.println(logininfo[1]);
+			
+			
+			
 			switch (logininfo[0]) {
 			case "GDATA":
 				System.out.println(logininfo[1]);

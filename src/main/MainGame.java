@@ -15,6 +15,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import networking.Client;
 import networking.Server;
 
 public class MainGame extends Application{
@@ -41,20 +42,15 @@ public class MainGame extends Application{
 		CheckBox fullscreencheckbox = new CheckBox("play Game as FULLSCREEN");
 		settingsbox.getChildren().add(fullscreencheckbox);
 		
-		Slider playersslider = new Slider(1, 2, 1);
+		Slider playersslider = new Slider(1, 4, 1);
 		playersslider.setShowTickLabels(true);
 		playersslider.setMajorTickUnit(1);
 		playersslider.setMinorTickCount(0);
 		playersslider.setSnapToTicks(true);
 		Label playerssliderlabel = new Label("Number of Players");
 		
-		Slider enemieslider = new Slider(0, 2, 0);
-		enemieslider.setShowTickLabels(true);
-		enemieslider.setMajorTickUnit(1);
-		enemieslider.setMinorTickCount(0);
-		enemieslider.setSnapToTicks(true);
-		Label enemiesliderlabel = new Label("Number of Enemies");
-		settingsbox.getChildren().addAll(playerssliderlabel, playersslider, new Separator(), enemiesliderlabel, enemieslider);
+		CheckBox runasServer = new CheckBox("Run as Server");
+		settingsbox.getChildren().addAll(playerssliderlabel, playersslider, new Separator(), runasServer);
 		
 		for(Node n:settingsbox.getChildren()){
 			settingsbox.setMargin(n, new Insets(10));
@@ -66,7 +62,7 @@ public class MainGame extends Application{
 		Button launch = new Button("Launch");
 		launch.setPrefSize(300, 200);
 		launch.setOnAction(e -> {
-			startGame(fullscreencheckbox.selectedProperty().get(), (int) playersslider.getValue(), (int) enemieslider.getValue());
+			startGame(fullscreencheckbox.selectedProperty().get(), (int) playersslider.getValue(), 0);
 		});
 		
 		launcher.setCenter(launch);
@@ -82,7 +78,10 @@ public class MainGame extends Application{
 	
 	private void startGame(boolean fullscreen, int players, int enemys){
 		System.out.println("Starting game with fullscreen: "+fullscreen+", Players: "+players+", Enemies: "+enemys);
-		Server s = new Server(1234);
+		Server s = new Server(8192);
+		s.start();
+		Client client = new Client("localhost", 8192, "lokmeinmatz");
+		client.connect();
 	}
 
 }
