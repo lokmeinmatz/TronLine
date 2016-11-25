@@ -11,6 +11,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -42,6 +43,9 @@ public class MainGame extends Application{
 		CheckBox fullscreencheckbox = new CheckBox("play Game as FULLSCREEN");
 		settingsbox.getChildren().add(fullscreencheckbox);
 		
+		TextField playername = new TextField("Playername");
+		
+		
 		Slider playersslider = new Slider(1, 4, 1);
 		playersslider.setShowTickLabels(true);
 		playersslider.setMajorTickUnit(1);
@@ -49,11 +53,35 @@ public class MainGame extends Application{
 		playersslider.setSnapToTicks(true);
 		Label playerssliderlabel = new Label("Number of Players");
 		
+		TextField Ipinput = new TextField();
+		Ipinput.setPromptText("IP of host, e.g. 192.645.24.1");
+		
+		TextField portInput = new TextField();
+		portInput.setPromptText("Port of host, e.g. 8192");
+		
+		
+		
 		CheckBox runasServer = new CheckBox("Run as Server");
-		settingsbox.getChildren().addAll(playerssliderlabel, playersslider, new Separator(), runasServer);
+		runasServer.setOnAction(e -> {
+			if(runasServer.selectedProperty().get()){
+				Ipinput.setDisable(true);
+				portInput.setDisable(true);
+			}
+			else{
+				Ipinput.setDisable(false);
+				portInput.setDisable(false);
+			}
+		});
+		
+		
+		
+		
+		
+		settingsbox.getChildren().addAll(playername, playerssliderlabel, playersslider, new Separator(), 
+				runasServer, new Separator(), Ipinput, portInput);
 		
 		for(Node n:settingsbox.getChildren()){
-			settingsbox.setMargin(n, new Insets(10));
+			VBox.setMargin(n, new Insets(10));
 		}
 		
 		launcher.setLeft(settingsbox);
@@ -62,7 +90,18 @@ public class MainGame extends Application{
 		Button launch = new Button("Launch");
 		launch.setPrefSize(300, 200);
 		launch.setOnAction(e -> {
-			startGame(fullscreencheckbox.selectedProperty().get(), (int) playersslider.getValue(), 0, runasServer.selectedProperty().get());
+			if(playername.getText().length() > 4){
+				if(runasServer.selectedProperty().get()){
+					startGame(fullscreencheckbox.selectedProperty().get(), (int) playersslider.getValue(), 0, 
+							true, "localhost", 8192, playername.getText());
+				}
+				else{
+					startGame(fullscreencheckbox.selectedProperty().get(), (int) playersslider.getValue(), 0, 
+							runasServer.selectedProperty().get(), Ipinput.getText(), Integer.parseInt(portInput.getText()), playername.getText());
+				}
+				
+			}
+			
 		});
 		
 		launcher.setCenter(launch);
@@ -76,14 +115,19 @@ public class MainGame extends Application{
 		window.show();
 	}
 	
-	private void startGame(boolean fullscreen, int players, int enemys, boolean server){
+	private void startGame(boolean fullscreen, int players, int enemys, boolean server, String connectTo, int port, String playername){
 		System.out.println("Starting game with fullscreen: "+fullscreen+", Players: "+players+", Enemies: "+enemys);
+		Client client;
 		if(server){
 			Server s = new Server(8192);
 			s.start();
+			
+			client = new Client(connectTo, port, playername);
+		}
+		else{
+			client = new Client("localhost", 8192, playername);
 		}
 		
-		Client client = new Client("localhost", 8192, "lokmeinmatz");
 		client.connect();
 	}
 
