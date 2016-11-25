@@ -122,11 +122,14 @@ public class MainGame extends Application{
 	private void startGame(boolean fullscreen, int players, int enemys, boolean server, String connectTo, int port, String playername){
 		System.out.println("Starting game with fullscreen: "+fullscreen+", Players: "+players+", Enemies: "+enemys);
 		Client client;
+		String IPasSTR = " ERROR-NO SERVER EXISTING ";
 		if(server){
 			Server s = new Server(8192);
 			s.start();
 			
 			client = new Client(connectTo, port, playername);
+			IPasSTR = s.getAdress();
+			System.out.println(s.getAdress());
 		}
 		else{
 			client = new Client("localhost", 8192, playername);
@@ -141,11 +144,12 @@ public class MainGame extends Application{
 		
 		if(client.connect()){
 			
-			GameLoop gameloop = new GameLoop(playername, client, new int[] {123, 123, 123}, server, WIDTH, HEIGHT);
-			BorderPane root = new BorderPane(gameloop);
+			GameLoop gameloop = new GameLoop(playername, client, new int[] {123, 123, 123}, server, WIDTH, HEIGHT, IPasSTR);
+			BorderPane root = new BorderPane(gameloop.getCanvas());
 			Scene gamescene = new Scene(root, WIDTH, HEIGHT);
 			window.setScene(gamescene);
 			window.setFullScreen(fullscreen);
+			window.centerOnScreen();
 			System.out.println("Started game");
 		}
 		else{

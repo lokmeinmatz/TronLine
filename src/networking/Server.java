@@ -5,6 +5,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +40,20 @@ public class Server {
 			
 		}, "NetLISTENER");
 		NetListener.start();
+		System.out.println(socket.getLocalPort());
+		
+	}
+	
+	
+	public String getAdress(){
+		try {
+			return socket.getInetAddress().getLocalHost().getHostAddress()+"  Port:"+socket.getLocalPort();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "WHUUT";
+		
 	}
 	
 	private void listen(){

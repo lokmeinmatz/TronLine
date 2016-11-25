@@ -1,34 +1,70 @@
 package main;
 
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
+import graphics.Renderer;
+import javafx.animation.AnimationTimer;
 import networking.Client;
 
-public class GameLoop extends Canvas{
+public class GameLoop{
 
+	
+	private double lastframe, secondtimer;
+	private long startNanoTime;
 	private String playername;
 	private Client netclient;
 	private int[] color;
+	private int[] dimensions;
+	private Renderer r;
+	private GameState gamestate;
 	
-	public GameLoop(String playername, Client netclient, int[] color, boolean isServer, int width, int height) {
+	
+	private enum GameState{
+		LOADING, CONNECTING, WAITING, PLAYING, WINNERSCREEN, RESET
+	}
+	
+	public GameLoop(String playername, Client netclient, int[] color, boolean isServer, int width, int height, String ip) {
+		
+		gamestate = GameState.LOADING;
+		
 		this.playername = playername;
 		this.netclient = netclient;
+		this.dimensions = new int[] {width, height};
 		this.color = color;
-		GraphicsContext gc = this.getGraphicsContext2D();
-		if(isServer){
+		r = new Renderer(width, height);
+		System.out.println(isServer);
+		startNanoTime = System.nanoTime();
+		gamestate = GameState.WAITING;
+		
+		new AnimationTimer() {
 			
-			//TODO: display ip and ports to connect
-			
-		}
-		else{
-			
-			//TODO: join, errormessage
-			
-		}
+			@Override
+			public void handle(long now) {
+				
+				double runtime = (now - startNanoTime) / 1000000000.0;
+				double deltatime = runtime - lastframe;
+				secondtimer += deltatime;
+				lastframe = runtime;
+				if(isServer && gamestate == GameState.WAITING){
+					
+					//TODO: display ip and ports to connect
+					r.renderStartScreen(deltatime, (float) Math.sin(runtime*2), ip);
+				}
+				else{
+					
+					//TODO: join, errormessage
+					
+				}
+				
+			}
+		}.start();;
 		
 		
 		
 		
+		
+	}
+	
+	public Renderer getCanvas(){
+		return r;
 	}
 	
 }
