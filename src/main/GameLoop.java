@@ -21,9 +21,43 @@ public class GameLoop{
 		LOADING, CONNECTING, WAITING, PLAYING, WINNERSCREEN, RESET
 	}
 	
+	private void setGameState(GameState state){
+		this.gamestate = state;
+		switch (state) {
+		case LOADING:
+			//TODO do loading stuff
+			break;
+			
+		case CONNECTING:
+			//TODO connecting screen
+			
+			break;
+			
+		case PLAYING:
+			//TODO init playing
+			break;
+			
+		case RESET:
+			//TODO do reset
+			break;
+			
+		case WAITING:
+			
+			r.setUpStartScreen();
+			
+			break;
+			
+		default:
+			break;
+		}
+	}
+	
+	
 	public GameLoop(String playername, Client netclient, int[] color, boolean isServer, int width, int height, String ip) {
 		
-		gamestate = GameState.LOADING;
+		setGameState(GameState.LOADING);
+		
+		
 		
 		this.playername = playername;
 		this.netclient = netclient;
@@ -32,7 +66,7 @@ public class GameLoop{
 		r = new Renderer(width, height);
 		System.out.println(isServer);
 		startNanoTime = System.nanoTime();
-		gamestate = GameState.WAITING;
+		setGameState(GameState.WAITING);
 		
 		
 		
@@ -45,6 +79,9 @@ public class GameLoop{
 				double deltatime = runtime - lastframe;
 				secondtimer += deltatime;
 				lastframe = runtime;
+				if(runtime > 3600){
+					startNanoTime = System.nanoTime();
+				}
 				if(isServer && gamestate == GameState.WAITING){
 					
 					//TODO: display ip and ports to connect

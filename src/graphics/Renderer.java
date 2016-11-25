@@ -1,5 +1,7 @@
 package graphics;
 
+import javafx.geometry.Point2D;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -29,7 +31,11 @@ public class Renderer extends Canvas{
 	
 	public void setUpStartScreen(){
 		this.setOnMousePressed(e -> {
-			
+			System.out.println(e.getSceneX()+"  "+e.getSceneY());
+			Rectangle2D buttonplay = new Rectangle2D(WIDTH/2-100, HEIGHT/1.5, 200, 60);
+			if(buttonplay.contains(new Point2D(e.getSceneX(), e.getSceneY()))){
+				System.out.println("Starting Game");
+			}
 		});
 	}
 
