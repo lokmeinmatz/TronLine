@@ -2,6 +2,7 @@ package main;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -15,6 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import networking.Client;
 import networking.Server;
@@ -25,6 +27,7 @@ public class MainGame extends Application{
 	//init vars
 	double lastframe, secondtimer;
 	private GameLoop gameloop;
+	private Stage window;
 	
 	public static void main(String[] args){
 		launch(args);
@@ -32,6 +35,7 @@ public class MainGame extends Application{
 	
 	@Override
 	public void start(Stage window) throws Exception {
+		this.window = window;
 		window.setTitle("Tron");
 		
 		Group root = new Group();
@@ -127,8 +131,26 @@ public class MainGame extends Application{
 		else{
 			client = new Client("localhost", 8192, playername);
 		}
+		int WIDTH = 1920, HEIGHT = 1080;
 		
-		client.connect();
+		if(fullscreen){
+			Rectangle2D screenbounds = Screen.getPrimary().getVisualBounds();
+			WIDTH = (int) screenbounds.getWidth();
+			HEIGHT = (int) screenbounds.getHeight();
+		}
+		
+		if(client.connect()){
+			
+			GameLoop gameloop = new GameLoop(playername, client, new int[] {123, 123, 123}, server, WIDTH, HEIGHT);
+			BorderPane root = new BorderPane(gameloop);
+			Scene gamescene = new Scene(root, WIDTH, HEIGHT);
+			window.setScene(gamescene);
+			window.setFullScreen(fullscreen);
+			System.out.println("Started game");
+		}
+		else{
+			System.out.println("Error while connecting");
+		}
 	}
 
 }
