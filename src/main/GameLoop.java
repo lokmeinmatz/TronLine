@@ -34,6 +34,8 @@ public class GameLoop{
 		startNanoTime = System.nanoTime();
 		gamestate = GameState.WAITING;
 		
+		
+		
 		new AnimationTimer() {
 			
 			@Override

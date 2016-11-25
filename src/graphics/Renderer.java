@@ -15,6 +15,22 @@ public class Renderer extends Canvas{
 		this.setWidth(WIDTH);
 		this.setHeight(HEIGHT);
 		gc = this.getGraphicsContext2D();
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	}
+	
+	public void setUpStartScreen(){
+		this.setOnMousePressed(e -> {
+			
+		});
 	}
 
 	public void renderStartScreen(double deltatime, float blend, String ip){
@@ -23,10 +39,17 @@ public class Renderer extends Canvas{
 		gc.setFill(Color.BLACK);
 		gc.fillRect(0, 0, WIDTH, HEIGHT);
 		gc.setFill(new Color(1, 1, 1, Math.min((Math.max(((blend+1)/2), 0)), 1)  ));
-		gc.setFont(new Font(40));
-		gc.fillText("Waiting for players", WIDTH/2-200, HEIGHT/3);
-		gc.setFont(new Font(20));
+		gc.setFont(new Font(60));
+		gc.fillText("Waiting for players", WIDTH/2-200, HEIGHT/2-100);
+		gc.setFont(new Font(80));
+		gc.setFill(Color.WHITE);
 		gc.fillText("IP: "+ip, WIDTH/2-200, HEIGHT/2);
+		
+		gc.setFill(Color.RED);
+		gc.fillRoundRect(WIDTH/2-100, HEIGHT/1.5, 200, 60, 10, 10);
+		gc.setFill(Color.WHITE);
+		gc.setFont(new Font(30));
+		gc.fillText("Start Game", WIDTH/2-80 ,HEIGHT/1.5+40);
 	}
 	
 	
