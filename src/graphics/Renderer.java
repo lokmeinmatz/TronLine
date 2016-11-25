@@ -1,11 +1,14 @@
 package graphics;
 
+import java.util.List;
+
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import main.Player;
 
 public class Renderer extends Canvas{
 	
@@ -39,7 +42,7 @@ public class Renderer extends Canvas{
 		});
 	}
 
-	public void renderStartScreen(double deltatime, float blend, String ip){
+	public void renderStartScreen(double deltatime, float blend, String ip, List<Player> players){
 		
 		//gc.clearRect(0, 0, WIDTH, HEIGHT);
 		gc.setFill(Color.BLACK);
@@ -56,6 +59,19 @@ public class Renderer extends Canvas{
 		gc.setFill(Color.WHITE);
 		gc.setFont(new Font(30));
 		gc.fillText("Start Game", WIDTH/2-80 ,HEIGHT/1.5+40);
+		
+		
+		gc.setFill(Color.DARKGREY);
+		gc.fillRect(WIDTH/3, HEIGHT/4, 250, players.size()*40);
+		
+		//render Lobby-Players
+		for (int i = 0; i < players.size(); i++){
+			
+			Player p = players.get(i);
+			gc.setFill(new Color(p.getColor()[0]/255, p.getColor()[1]/255, p.getColor()[2]/255, 1));
+			gc.fillText(p.getPlayername(), WIDTH/3+10, HEIGHT/4+(i-1)*40);
+			
+		}
 	}
 	
 	

@@ -1,5 +1,8 @@
 package main;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import graphics.Renderer;
 import javafx.animation.AnimationTimer;
 import networking.Client;
@@ -15,7 +18,7 @@ public class GameLoop{
 	private int[] dimensions;
 	private Renderer r;
 	private GameState gamestate;
-	
+	private List<Player> players; 
 	
 	private enum GameState{
 		LOADING, CONNECTING, WAITING, PLAYING, WINNERSCREEN, RESET
@@ -56,9 +59,11 @@ public class GameLoop{
 	public GameLoop(String playername, Client netclient, int[] color, boolean isServer, int width, int height, String ip) {
 		
 		setGameState(GameState.LOADING);
+		players = new ArrayList<>();
+		players.add(new Player(new int[]{200, 200, 200},  "Lokmientz", null, null, 0));
+		players.add(new Player(new int[]{100, 200, 0},  "Lztguztuztutz", null, null, 0));
 		
-		
-		
+		this.netclient = netclient;
 		this.playername = playername;
 		this.netclient = netclient;
 		this.dimensions = new int[] {width, height};
@@ -85,7 +90,7 @@ public class GameLoop{
 				if(isServer && gamestate == GameState.WAITING){
 					
 					//TODO: display ip and ports to connect
-					r.renderStartScreen(deltatime, (float) Math.sin(runtime*2), ip);
+					r.renderStartScreen(deltatime, (float) Math.sin(runtime*2), ip, players);
 				}
 				else{
 					
