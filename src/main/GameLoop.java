@@ -60,8 +60,8 @@ public class GameLoop{
 		
 		setGameState(GameState.LOADING);
 		players = new ArrayList<>();
-		players.add(new Player(new int[]{200, 200, 200},  "Lokmientz", null, null, 0));
-		players.add(new Player(new int[]{100, 200, 0},  "Lztguztuztutz", null, null, 0));
+		players.add(new Player(color,  playername, null, null, 0));
+		//players.add(new Player(new int[]{100, 200, 0},  "Lztguztuztutz", null, null, 0));
 		
 		this.netclient = netclient;
 		this.playername = playername;

@@ -62,14 +62,17 @@ public class Renderer extends Canvas{
 		
 		
 		gc.setFill(Color.DARKGREY);
-		gc.fillRect(WIDTH/3, HEIGHT/4, 250, players.size()*40);
+		gc.fillRect(WIDTH/5, HEIGHT/4, 250, players.size()*60);
+		
+		gc.setFill(Color.WHITE);
+		gc.fillText("Connected Players", WIDTH/5, HEIGHT/4-40);
 		
 		//render Lobby-Players
 		for (int i = 0; i < players.size(); i++){
 			
 			Player p = players.get(i);
-			gc.setFill(new Color(p.getColor()[0]/255, p.getColor()[1]/255, p.getColor()[2]/255, 1));
-			gc.fillText(p.getPlayername(), WIDTH/3+10, HEIGHT/4+(i-1)*40);
+			gc.setFill(new Color(((float)p.getColor()[0])/255, ((float)p.getColor()[1])/255, ((float)p.getColor()[2])/255, 1));
+			gc.fillText(p.getPlayername(), WIDTH/5+5, (HEIGHT/4+(i)*60)+50);
 			
 		}
 	}
