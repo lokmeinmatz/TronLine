@@ -101,7 +101,7 @@ public class MainGame extends Application{
 				}
 				else{
 					startGame(fullscreencheckbox.selectedProperty().get(), (int) playersslider.getValue(), 0, 
-							runasServer.selectedProperty().get(), Ipinput.getText(), Integer.parseInt(portInput.getText()), playername.getText());
+							false, Ipinput.getText(), Integer.parseInt(portInput.getText()), playername.getText());
 				}
 				
 			}
@@ -123,16 +123,20 @@ public class MainGame extends Application{
 		System.out.println("Starting game with fullscreen: "+fullscreen+", Players: "+players+", Enemies: "+enemys);
 		Client client;
 		String IPasSTR = " ERROR-NO SERVER EXISTING ";
+		window.setOnCloseRequest(event -> {
+			System.exit(0);
+		});
 		if(server){
 			Server s = new Server(8192);
 			s.start();
+			client = new Client("localhost", 8192, playername);
 			
-			client = new Client(connectTo, port, playername);
 			IPasSTR = s.getAdress();
 			System.out.println(s.getAdress());
 		}
 		else{
-			client = new Client("localhost", 8192, playername);
+			client = new Client(connectTo, port, playername);
+			IPasSTR = connectTo+":"+String.valueOf(port);
 		}
 		int WIDTH = 1920, HEIGHT = 1080;
 		

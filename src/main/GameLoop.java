@@ -69,7 +69,7 @@ public class GameLoop{
 		this.dimensions = new int[] {width, height};
 		this.color = color;
 		r = new Renderer(width, height);
-		System.out.println(isServer);
+		
 		startNanoTime = System.nanoTime();
 		setGameState(GameState.WAITING);
 		
@@ -87,10 +87,10 @@ public class GameLoop{
 				if(runtime > 3600){
 					startNanoTime = System.nanoTime();
 				}
-				if(isServer && gamestate == GameState.WAITING){
+				if(gamestate == GameState.WAITING){
 					
 					//TODO: display ip and ports to connect
-					r.renderStartScreen(deltatime, (float) Math.sin(runtime*2), ip, players);
+					r.renderStartScreen(deltatime, (float) Math.sin(runtime*2), ip, players, isServer);
 				}
 				else{
 					
@@ -98,8 +98,17 @@ public class GameLoop{
 					
 				}
 				
+				if(secondtimer > 1){
+					secondtimer = 0;
+					
+					
+					//update connected players
+					players = netclient.getPlayers();
+					
+				}
+				
 			}
-		}.start();;
+		}.start();
 		
 		
 		

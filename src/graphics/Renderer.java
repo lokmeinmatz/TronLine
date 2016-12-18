@@ -42,7 +42,7 @@ public class Renderer extends Canvas{
 		});
 	}
 
-	public void renderStartScreen(double deltatime, float blend, String ip, List<Player> players){
+	public void renderStartScreen(double deltatime, float blend, String ip, List<Player> players, boolean isServer){
 		
 		//gc.clearRect(0, 0, WIDTH, HEIGHT);
 		gc.setFill(Color.BLACK);
@@ -52,14 +52,24 @@ public class Renderer extends Canvas{
 		gc.fillText("Waiting for players", WIDTH/2-200, HEIGHT/2-100);
 		gc.setFont(new Font(80));
 		gc.setFill(Color.WHITE);
-		gc.fillText("IP: "+ip, WIDTH/2-200, HEIGHT/2);
+		if(isServer){
+			gc.fillText("IP: "+ip, WIDTH/2-200, HEIGHT/2);
+		}
+		else{
+			gc.fillText("You joined "+ip, WIDTH/2-200, HEIGHT/2);
+		}
 		
 		gc.setFill(Color.RED);
 		gc.fillRoundRect(WIDTH/2-100, HEIGHT/1.5, 200, 60, 10, 10);
 		gc.setFill(Color.WHITE);
 		gc.setFont(new Font(30));
-		gc.fillText("Start Game", WIDTH/2-80 ,HEIGHT/1.5+40);
 		
+		if(isServer){
+			gc.fillText("Start Game", WIDTH/2-80 ,HEIGHT/1.5+40);
+		}
+		else{
+			gc.fillText("Start Game", WIDTH/2-80 ,HEIGHT/1.5+40);
+		}
 		
 		gc.setFill(Color.DARKGREY);
 		gc.fillRect(WIDTH/5, HEIGHT/4, 250, players.size()*60);

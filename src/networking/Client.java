@@ -121,7 +121,7 @@ public class Client {
 		}
 	}
 	
-	private List<Player> getPlayers(){
+	public List<Player> getPlayers(){
 		return netplayers;
 	}
 	

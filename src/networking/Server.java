@@ -79,6 +79,10 @@ public class Server {
 			
 			Server_Client c = new Server_Client(logininfo[1], packet.getAddress(), packet.getPort(), new int[]{111, 111, 111});
 			if(!clients.contains(c)){
+				for(Server_Client cls:clients){
+					String joinstring = "NWPLR§"+c.getPlayername()+"§"+c.getColors()[0]+"$";
+					send(joinstring.getBytes(), cls.getPlayerInetAdress(), cls.getPort());
+				}
 				clients.add(c);
 			}
 		}
